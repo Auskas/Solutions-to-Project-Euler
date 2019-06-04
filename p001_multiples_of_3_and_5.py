@@ -41,7 +41,7 @@ def sum_of_progression(N):
     return int(divisible_by_three + divisible_by_five - divisible_by_fifteen)
 
 if __name__ == "__main__":
-    N = 1000000
+    N = 1000
     start = time.perf_counter()
     print("The sum of all the multiples of 3 or 5 below", N,"is", sum_of_multiples(N))
     print("The execution time is", time.perf_counter() - start,"seconds.")
