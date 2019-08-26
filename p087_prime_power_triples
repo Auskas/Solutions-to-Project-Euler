@@ -1,0 +1,50 @@
+# 
+# Solution to Project Euler Problem 87 Prime power triples.
+# Copyright (c) Auskas. All rights reserved.
+#
+# https://github.com/Auskas/Solutions-to-Project-Euler
+# The solution is pretty straightforward: squares, cubes and the fourth power of prime numbers are precalculated.
+# In three cycles the sum of squares, cubes, and the fourth powers is calculated.
+# If the sum is below fifty million and it is unique the counter is increased by 1.
+
+# Module auskas contains a function that calculates prime numbers below the desired limit using the so-called Sieve of Eratosphenes.
+import auskas
+import time
+
+def powers_lists(primes):
+    """ Gets a list of prime numbers.
+
+    Returns lists of the squares, cubes, and the fourth powers below fifty million.""" 
+    square = []
+    cube = []
+    fourth_power = []
+    for elem in primes:
+        if elem ** 2 < 50000000:
+            square.append(elem ** 2)
+            if elem ** 3 < 50000000:
+                cube.append(elem ** 3)
+                if elem ** 4 < 50000000:
+                    fourth_power.append(elem ** 4)
+    return square, cube, fourth_power
+
+st_time = time.perf_counter()
+# The upper limit for calculating prime numbers is the floor of the square root of fifty million, i.e. 7071.
+primes = auskas.primes(7072)
+squares, cubes, fourth_power = powers_lists(primes)
+# The following set is used for checking the uniqueness of the sums.
+numbers = set()
+counter = 0
+for fourth in fourth_power:
+    for cube in cubes:
+        # If the sum of a cube and a fourth power is greater than fifty million, there is no need to check the squares.
+        if fourth + cube > 50000000:
+            break
+        for square in squares:
+            number = fourth + cube + square
+            if number > 50000000:
+                break
+            if number not in numbers:
+                numbers.add(number)
+                counter += 1
+print("The total number of numbers below fifty million which can be formed as the sum of a prime square, prime cube, and prime fourth power equals to", counter)
+print("The execution time is {0} seconds.".format(time.perf_counter() - st_time))
